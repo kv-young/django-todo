@@ -1,0 +1,101 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Tasks | TodoList{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
+
+  <!-- Header -->
+  <header class="mb-8">
+    <p class="text-sm font-medium text-primary mb-2">
+      YOUR PERSONAL WORKSPACE
+    </p>
+    <h1 class="text-4xl font-bold tracking-tight">
+      My Tasks
+    </h1>
+    <p class="text-base-content/60 mt-2">
+      Organize your day, one task at a time.
+    </p>
+  </header>
+
+  <!-- Add task form -->
+  <section class="card bg-base-200 shadow-sm mb-8">
+    <div class="card-body">
+      <h2 class="card-title text-lg mb-2">Add a new task</h2>
+
+      <form method="post" class="flex flex-col sm:flex-row gap-3">
+        {% csrf_token %}
+
+        <input
+          type="text"
+          name="title"
+          placeholder="What needs to be done?"
+          class="input input-bordered w-full"
+          aria-label="Task title"
+          required
+        />
+
+        <button type="submit" class="btn btn-primary sm:shrink-0">
+          <span>+</span>
+          Add task
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Task list -->
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">Your tasks</h2>
+      <span class="badge badge-ghost">
+        {{ tasks|length }} tasks
+      </span>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      {% for task in tasks %}
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+          <div class="card-body p-4 flex-row items-center gap-4">
+
+            <input
+              type="checkbox"
+              class="checkbox checkbox-primary"
+              {% if task.completed %}checked{% endif %}
+              aria-label="Task completed"
+            />
+
+            <div class="flex-1 min-w-0">
+              <p class="font-medium break-words {% if task.completed %}line-through text-base-content/50{% endif %}">
+                {{ task.title }}
+              </p>
+              <p class="text-xs text-base-content/50 mt-1">
+                Created {{ task.created_at|date:"d M Y, H:i" }}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-ghost btn-sm text-error"
+              aria-label="Delete task"
+              title="Delete task"
+            >
+              Delete
+            </button>
+
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-center py-12 px-4 border border-dashed border-base-300 rounded-box">
+          <div class="text-4xl mb-3">📝</div>
+          <h3 class="text-lg font-semibold">No tasks yet</h3>
+          <p class="text-base-content/60 mt-1">
+            Add your first task and get things moving!
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+{% endblock content %}
