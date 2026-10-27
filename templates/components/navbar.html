@@ -1,0 +1,31 @@
+<nav class="navbar bg-base-100 shadow-sm px-4 sm:px-8">
+  <div class="flex-1">
+    <a href="{% url "home" %}" class="btn btn-ghost text-xl font-bold"> TodoList </a>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <label class="swap swap-rotate">
+      <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode" />
+
+      <!-- Sun icon -->
+      <svg
+        class="swap-off size-6 fill-current"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M5.64 17.66 4.22 19.08 5.64 20.5l1.42-1.42-1.42-1.42ZM12 2v2h-0.01V2H12Zm0 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm7.78 13.08 1.42 1.42-1.42 1.42-1.42-1.42 1.42-1.42ZM20 11h2v2h-2v-2ZM2 11h2v2H2v-2Zm15.36-5.66 1.42-1.42 1.42 1.42-1.42 1.42-1.42-1.42ZM5.64 3.92 7.06 5.34 5.64 6.76 4.22 5.34l1.42-1.42Z"
+        />
+      </svg>
+
+      <!-- Moon icon -->
+      <svg
+        class="swap-on size-6 fill-current"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path d="M21 14.2A8.5 8.5 0 0 1 9.8 3 8.5 8.5 0 1 0 21 14.2Z" />
+      </svg>
+    </label>
+  </div>
+</nav>
