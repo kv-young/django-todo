@@ -1,0 +1,26 @@
+<section class="flex items-center justify-between mb-4">
+  <h2 class="text-xl font-semibold">Your tasks</h2>
+
+  <form method="get">
+    <select
+      name="status"
+      class="select select-bordered select-sm"
+      onchange="this.form.submit()"
+    >
+      <option value="all"
+        {% if status == "all" %}selected{% endif %}>
+        All
+      </option>
+
+      <option value="completed"
+        {% if status == "completed" %}selected{% endif %}>
+        Completed
+      </option>
+
+      <option value="pending"
+        {% if status == "pending" %}selected{% endif %}>
+        In Progress
+      </option>
+    </select>
+  </form>
+</section>
