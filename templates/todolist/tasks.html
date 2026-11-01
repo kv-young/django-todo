@@ -1,101 +1,143 @@
-{% extends "base.html" %} {% block title %}My Tasks | TodoList{% endblock %}
+
+{% extends "base.html" %}
+
+{% block title %}My Tasks | TodoList{% endblock %}
+
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
-  <header class="mb-8">
-    <p class="text-sm font-medium text-primary mb-2">YOUR PERSONAL WORKSPACE</p>
-    <h1 class="text-4xl font-bold tracking-tight">My Tasks</h1>
-    <p class="text-base-content/60 mt-2">
-      Organize your day, one task at a time.
-    </p>
-  </header>
 
-  <section class="card bg-base-200 shadow-sm mb-8">
-    <div class="card-body">
-      <h2 class="card-title text-lg mb-2">Add a new task</h2>
-
-      <form method="post" class="flex flex-col sm:flex-row gap-3">
-        {% csrf_token %}
-        <input
-          type="text"
-          name="title"
-          placeholder="What needs to be done?"
-          class="input input-bordered w-full"
-          aria-label="Task title"
-          required
-        />
-        <button type="submit" class="btn btn-primary sm:shrink-0">
-          <span>+</span>
-          Add task
-        </button>
-      </form>
-    </div>
-  </section>
-
-  
-  
-    {% include "components/filter.html" %}
-  
-
-    {% comment %} <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold">Your tasks</h2>
-      <span class="badge badge-ghost">{{ tasks|length }} tasks</span>
-    </div> {% endcomment %}
-
-    <div class="flex flex-col gap-3">
-      {% for task in tasks %}
-      <div class="card bg-base-100 border border-base-300 shadow-sm">
-        <div class="card-body p-4 flex-row items-center gap-4">
-          <form method="post" action="{% url 'toggle' task.id %}">
-            {% csrf_token %}
-            <input
-              type="checkbox"
-              class="checkbox checkbox-success"
-              {% if task.completed %}checked{% endif %}
-              aria-label="Toggle task completion"
-              onchange="this.form.submit()"
-            />
-          </form>
-
-          <div class="flex-1 min-w-0">
-            <p
-              class="font-medium wrap-break-words {% if task.completed %}line-through text-base-content/50{% endif %}"
-            >
-              {{ task.title }}
-            </p>
-            <p
-              class="text-xs{% if task.completed %} text-blue-500 font-bold {% else %} text-base-content/50 {% endif %} mt-1"
-            >
-              {% if task.completed %} Completed {% else %} Created {{
-              task.created_at|date:"d M Y, H:i" }} {% endif %}
-            </p>
-          </div>
-
-          <a
-            href="{% url 'update' task.id %}"
-            class="btn btn-ghost btn-sm text-emerald-400"
-          >
-            Edit
-          </a>
-          <a
-            href="{% url 'delete' task.id %}"
-            class="btn btn-ghost btn-sm text-error"
-          >
-            Delete
-          </a>
-        </div>
-      </div>
-      {% empty %}
-      <div
-        class="text-center py-12 px-4 border border-dashed border-base-300 rounded-box"
-      >
-        <div class="text-4xl mb-3">📝</div>
-        <h3 class="text-lg font-semibold">No tasks yet</h3>
-        <p class="text-base-content/60 mt-1">
-          Add your first task and get things moving!
+    <header class="mb-8">
+        <p class="text-sm font-medium text-primary mb-2">
+            YOUR PERSONAL WORKSPACE
         </p>
-      </div>
-      {% endfor %}
+
+        <h1 class="text-4xl font-bold tracking-tight">My Tasks</h1>
+
+        <p class="text-base-content/60 mt-2">
+            Organize your day, one task at a time.
+        </p>
+    </header>
+
+    <section class="card bg-base-200 shadow-sm mb-8">
+        <div class="card-body">
+            <h2 class="card-title text-lg mb-2">Add a new task</h2>
+
+            <form method="post" class="flex flex-col sm:flex-row gap-3">
+                {% csrf_token %}
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="What needs to be done?"
+                    class="input input-bordered w-full"
+                    aria-label="Task title"
+                    required
+                />
+
+                <button type="submit" class="btn btn-primary sm:shrink-0">
+                    <span>+</span>
+                    Add task
+                </button>
+            </form>
+        </div>
+    </section>
+
+    {% include "components/filter.html" %}
+
+    <div class="flex flex-col gap-3 mb-4">
+        {% for task in tasks %}
+            <div class="card bg-base-100 border border-base-300 shadow-sm">
+                <div class="card-body p-4 flex-row items-center gap-4">
+
+                    <form method="post" action="{% url 'toggle' task.id %}">
+                        {% csrf_token %}
+
+                        <input
+                            type="checkbox"
+                            class="checkbox checkbox-success"
+                            {% if task.completed %}checked{% endif %}
+                            aria-label="Toggle task completion"
+                            onchange="this.form.submit()"
+                        />
+                    </form>
+
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium {% if task.completed %}line-through text-base-content/50{% endif %}">
+                            <a
+                                href="{% url 'detail' task.id %}"
+                                class="hover:text-primary wrap-break-words"
+                            >
+                                {{ task.title }}
+                            </a>
+                        </p>
+
+                        <p class="text-xs mt-1 {% if task.completed %}text-blue-500 font-bold{% else %}text-base-content/50{% endif %}">
+                            {% if task.completed %}
+                                Completed
+                            {% else %}
+                                Created {{ task.created_at|date:"d M Y, H:i" }}
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <a
+                        href="{% url 'update' task.id %}"
+                        class="btn btn-ghost btn-sm text-emerald-400"
+                    >
+                        Edit
+                    </a>
+
+                    <a
+                        href="{% url 'delete' task.id %}"
+                        class="btn btn-ghost btn-sm text-error"
+                    >
+                        Delete
+                    </a>
+
+                </div>
+            </div>
+
+        {% empty %}
+            <div class="text-center py-12 px-4 border border-dashed border-base-300 rounded-box">
+                <div class="text-4xl mb-3">📝</div>
+
+                <h3 class="text-lg font-semibold">No tasks yet</h3>
+
+                <p class="text-base-content/60 mt-1">
+                    Add your first task and get things moving!
+                </p>
+            </div>
+        {% endfor %}
     </div>
-  </section>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+        <nav
+            class="flex justify-center items-center gap-2 mt-6"
+            aria-label="Pagination"
+        >
+            {% if page_obj.has_previous %}
+                <a
+                    class="btn btn-sm"
+                    href="?page={{ page_obj.previous_page_number }}&status={{ status|urlencode }}&q={{ search_query|urlencode }}"
+                >
+                    Previous
+                </a>
+            {% endif %}
+
+            <span class="text-sm text-base-content/70">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a
+                    class="btn btn-sm"
+                    href="?page={{ page_obj.next_page_number }}&status={{ status|urlencode }}&q={{ search_query|urlencode }}"
+                >
+                    Next
+                </a>
+            {% endif %}
+        </nav>
+    {% endif %}
+
 </div>
 {% endblock content %}

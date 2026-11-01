@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Task Details | TodoList{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10 sm:py-16">
+
+  <header class="mb-8">
+    <p class="text-sm font-medium text-primary mb-2">
+      YOUR PERSONAL WORKSPACE
+    </p>
+    <h1 class="text-4xl font-bold tracking-tight">Task Details</h1>
+  </header>
+
+  <section class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body p-6 sm:p-8 gap-5">
+
+      <div>
+        <p class="text-sm text-base-content/60 mb-2">Task</p>
+        <h2 class="text-2xl font-semibold wrap-break-words">
+          {{ task.title }}
+        </h2>
+      </div>
+
+      <div>
+        <p class="text-sm text-base-content/60 mb-2">Status</p>
+        {% if task.completed %}
+          <span class="badge badge-success">Completed</span>
+        {% else %}
+          <span class="badge badge-warning">In Progress</span>
+        {% endif %}
+      </div>
+
+      <div>
+        <p class="text-sm text-base-content/60 mb-2">Created</p>
+        <p>{{ task.created_at|date:"d M Y, H:i" }}</p>
+      </div>
+
+      <div class="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+        <a href="{% url 'home' %}" class="btn btn-ghost flex-1">
+          Back to tasks
+        </a>
+        <a href="{% url 'update' task.id %}" class="btn btn-primary flex-1">
+          Edit task
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+{% endblock content %}

@@ -10,4 +10,5 @@ urlpatterns = [
     ),
     path("tasks/<int:task_id>/update/", views.update, name="update"),
     path("tasks/<int:task_id>/delete/", views.delete, name="delete"),
+    path("tasks/<int:task_id>/", views.detail, name="detail")
 ]

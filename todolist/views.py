@@ -1,21 +1,51 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from todolist.models import Task
+from django.core.paginator import Paginator
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
+from todolist.models import Task
 
 
 def home(request):
     if request.method == "POST":
         title = request.POST.get("title", "").strip()
+
         if title:
             Task.objects.create(title=title)
-            return redirect("home")
+
+        return redirect("home")
+
+    # Search
+    search_query = request.GET.get("q", "").strip()
+
+    # Status filter
     status = request.GET.get("status", "all")
+
     tasks = Task.objects.all().order_by("-created_at")
+
+    if search_query:
+        tasks = tasks.filter(title__icontains=search_query)
+
     if status == "completed":
         tasks = tasks.filter(completed=True)
-    if status == "pending":
+    elif status == "pending":
         tasks = tasks.filter(completed=False)
+
+    # Pagination
+    paginator = Paginator(tasks, 5)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
     return render(
-        request, "todolist/tasks.html", {"tasks": tasks, "status": status}
+        request,
+        "todolist/tasks.html",
+        {
+            "tasks": page_obj,
+            "page_obj": page_obj,
+            "status": status,
+            "search_query": search_query,
+        },
     )
 
 
@@ -49,4 +79,10 @@ def delete(request, task_id):
         task.delete()
         return redirect("home")
 
-    return render(request, "todolist/delete_confirmation.html", {"task": task})   
+    return render(request, "todolist/delete_confirmation.html", {"task": task}) 
+
+
+def detail(request, task_id):
+    task = get_object_or_404(Task, id=task_id)  
+    
+    return render(request, "todolist/task_detail.html", {"task": task})
